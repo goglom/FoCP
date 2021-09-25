@@ -1,4 +1,4 @@
 # FoCP
 Fundamentals of computational physics
 
-Ничё интерсного
+Ничё интерсного вобщем-то...
