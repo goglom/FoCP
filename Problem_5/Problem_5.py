@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def _poly_newton_coefficient(x, y):
+def _poly_newton_coefficient(x: np.array, y: np.array):
     m = len(x)
     a = np.copy(y)
 
@@ -12,11 +12,10 @@ def _poly_newton_coefficient(x, y):
     return a
 
 
-def newton_polynomial(x_data, y_data):
-    a = _poly_newton_coefficient(x_data, y_data)
-    p_degree = len(x_data) - 1
-
+def newton_polynomial(x_data: np.array, y_data: np.array):
     def _poly_func(x: np.number):
+        p_degree = len(x_data) - 1
+        a = _poly_newton_coefficient(x_data, y_data)
         p = a[p_degree]
         for k in range(1, p_degree + 1):
             p = a[p_degree - k] + (x - x_data[p_degree - k]) * p
@@ -44,7 +43,7 @@ n_vals = [i for i in range(4, 15 + 1)]
 x_draw_grid = np.linspace(0.1, 3, 1000)
 plt.figure(figsize=(14, 6))
 
-method = newton_polynomial
+method = lagrange_polynomial
 
 for n in n_vals:
     x_data = np.arange(0, n) / n + 1
