@@ -44,8 +44,8 @@ def runge_kutta_fourth_method(x_grid: np.array, func, initial_condition):
 
 f = lambda x, y: -y
 
-steps = 32
-x_grid = np.linspace(0, 3, steps)
+steps = 64
+x_grid = np.linspace(0, 5, steps)
 
 y_ground_truth = np.exp(-x_grid)
 y_calc = [
@@ -53,19 +53,18 @@ y_calc = [
     runge_kutta_second_method(x_grid, f, 1.0),
     runge_kutta_fourth_method(x_grid, f, 1.0)
     ]
-names = ["Eiler", "Runge-Kutta second", "Runge-Kutta fourth"]
+names = ["Eiler", "Runge-Kutta 2", "Runge-Kutta 4"]
 
-plt.figure(figsize=(8, 9))
+plt.figure(figsize=(8, 6))
 
 for i, (y, name) in enumerate(zip(y_calc, names)):
     plt.subplot(3, 1, 1 + i)
     err = np.sqrt(np.sum((y - y_ground_truth)**2))
     plt.title(name + f' (l2 error = {err:.1e})')
-    plt.plot(x_grid, y_ground_truth, label='Ground truth')
-    plt.plot(x_grid, y, "o", label='Numeric method')
-    plt.grid()
-    plt.legend()
+    plt.plot(x_grid, (y_ground_truth - y), label=name + f' err = {err:.1e}')
 
+plt.grid()
+plt.legend()
 plt.tight_layout()
 plt.show()
 

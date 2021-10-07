@@ -1,6 +1,7 @@
+import matplotlib
 import numpy as np
 from matplotlib import pyplot as plt
-
+from itertools import product, chain
 
 def runge_kutta_second_method(x_grid: np.array, func: tuple, initial_conditions: tuple[float, float], alpha: float = 3/4):
     y_res = np.zeros((2, len(x_grid)))
@@ -26,6 +27,18 @@ functions = (
     lambda t, x, y: 2 * x * y - 10 * y
 )
 
-xy_solution = runge_kutta_second_method(t_grid, functions, (1, 1.0))
-plt.plot(xy_solution[0], xy_solution[1], 'k-o', markersize=4, linewidth=1, mfc='red', mec='red')
+cond = range(1, 5 + 1)
+conditions = [(x, y) for x, y in product(cond, cond)]
+
+cm_subsection = np.linspace(0., 1., len(conditions)) 
+colors = [ matplotlib.cm.jet(x) for x in cm_subsection ]
+
+for cond, color in zip(conditions, colors):
+    xy_solution = runge_kutta_second_method(t_grid, functions, cond)
+    plt.plot(*cond, 'o', ms=4, c=color)
+    plt.arrow(*cond, *((xy_solution[:, 1] - xy_solution[:, 0])* 2.5), width=0.05, facecolor='red', edgecolor='none')
+    plt.plot(xy_solution[0], xy_solution[1], lw=2, c=color)
+    
+
+plt.grid()
 plt.show()

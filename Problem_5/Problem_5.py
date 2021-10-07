@@ -65,7 +65,7 @@ plt.legend()
 
 plt.title("Function diffs")
 plt.subplot(1, 2, 1)
-plt.yscale("log")
+#plt.yscale("log")
 plt.grid()
 plt.legend()
 
