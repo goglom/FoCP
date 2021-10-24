@@ -1,18 +1,14 @@
 import numpy as np
+from tma import tma_solver
 
 
-def back_iteration_eigen_solver(matrix: np.array, start_eigvec: np.array, start_eigval: float, tol: float, lin_solver):
-    assert matrix.dtype == float and matrix.shape[0] == matrix.shape[1]
-    n = matrix.shape[0]
-    prev_eigval = start_eigval
-    prev_eigvec = start_eigvec
-    error = np.inf
+def back_iteration_eigen_solver(a: np.array, b: np.array, c: np.array, start_eigvec: np.array, iters: int):
+    eigvec = start_eigvec / np.linalg.norm(start_eigvec)
 
-    while error > tol:
-        eigvec = lin_solver(matrix - prev_eigval * np.identity(n, dtype=float), prev_eigvec)
-        eigval = prev_eigval + np.mean(prev_eigvec / eigvec)
-        error = abs(abs(eigval) - abs(prev_eigval))
-        prev_eigval = eigval
-        prev_eigvec = eigvec
-
+    for _ in range(iters):
+        new_eigvec = tma_solver(a, b, c, eigvec)
+        new_eigvec /= np.linalg.norm(new_eigvec)
+        eigval = np.linalg.norm(new_eigvec) / np.linalg.norm(eigvec)
+        eigvec = new_eigvec
+        
     return eigvec / np.linalg.norm(eigvec), eigval
