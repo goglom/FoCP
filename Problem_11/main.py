@@ -12,15 +12,17 @@ fig, ax = plt.subplots()
 fig.subplots_adjust(bottom=0.25, left=0.1)
 
 ax_itres = plt.axes([0.10, 0.05, 0.25, 0.03])
+ax_n =  plt.axes([0.10, 0.10, 0.25, 0.03])
 ax_xw = plt.axes([0.50, 0.10, 0.25, 0.03])
 
 slider_iters = Slider(ax_itres, "Iters", 0, 50, iters, valstep=1)
 slider_xw = Slider(ax_xw, "width", 1, 40, x_width, valstep=1)
-
+slider_n = Slider(ax_n, "N", 2, 2000, n, valstep=1)
 
 def update(*args):
     iters = slider_iters.val
     x_width = slider_xw.val
+    n = slider_n.val
 
     x = np.linspace(-x_width / 2, x_width / 2, n)
     h = x[1] - x[0]
@@ -30,7 +32,7 @@ def update(*args):
     b = np.full(x.shape[0], 1 / h**2, dtype=float)
     b += u
     gen = np.random.RandomState(2)
-    d = np.ones_like(x)#gen.random_sample(x.shape)
+    d = gen.random_sample(x.shape)
 
     eigenvec, eigenval =  back_iteration_eigen_solver(a, b, a, d, iters)
     gt = np.exp(-x**2 / 2)
@@ -40,12 +42,14 @@ def update(*args):
     ax.set_title(f"Eigen value = {eigenval}")
     ax.plot(x, eigenvec, lw=4, label="my solution")
     ax.plot(x, gt, label="real solution")
+    ax.set_ylim(0, 0.15)
     ax.legend()
     ax.grid()
 
 
 slider_iters.on_changed(update)
 slider_xw.on_changed(update)
+slider_n.on_changed(update)
 
 update()
 
