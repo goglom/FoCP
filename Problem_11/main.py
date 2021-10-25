@@ -1,28 +1,52 @@
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.widgets import Slider
 from eigen import back_iteration_eigen_solver
 
 n = 1000
-x_left, x_right = -10, 10
-x = np.linspace(x_left, x_right, n)
-h = x[1] - x[0]
-
-a = np.full(x.shape[0] - 1, -1 / (2 * h**2), dtype=float)
-b = np.full(x.shape[0], 1 / h**2, dtype=float)
-b += x**2 / 2
-gen = np.random.RandomState(2)
-d = np.ones_like(x)#gen.random_sample(x.shape)
+iters = 100
+x_left, x_width = -10, 20
 
 
-eigenvec, eigenval =  back_iteration_eigen_solver(a, b, a, d, 10)
+fig, ax = plt.subplots()
+fig.subplots_adjust(bottom=0.25, left=0.1)
 
-print(eigenval)
+ax_itres = plt.axes([0.10, 0.05, 0.25, 0.03])
+ax_xw = plt.axes([0.50, 0.10, 0.25, 0.03])
 
-plt.plot(x, eigenvec)
+slider_iters = Slider(ax_itres, "Iters", 0, 50, iters, valstep=1)
+slider_xw = Slider(ax_xw, "width", 1, 40, x_width, valstep=1)
 
-gt = np.exp(-x**2 / 2)
-gt /= np.linalg.norm(gt)
-plt.plot(x, gt)
 
-plt.plot()
+def update(*args):
+    iters = slider_iters.val
+    x_width = slider_xw.val
+
+    x = np.linspace(-x_width / 2, x_width / 2, n)
+    h = x[1] - x[0]
+    u = x**2 / 2
+
+    a = np.full(x.shape[0] - 1, -1 /  h**2 / 2, dtype=float)
+    b = np.full(x.shape[0], 1 / h**2, dtype=float)
+    b += u
+    gen = np.random.RandomState(2)
+    d = np.ones_like(x)#gen.random_sample(x.shape)
+
+    eigenvec, eigenval =  back_iteration_eigen_solver(a, b, a, d, iters)
+    gt = np.exp(-x**2 / 2)
+    gt /= np.linalg.norm(gt)
+
+    ax.clear()
+    ax.set_title(f"Eigen value = {eigenval}")
+    ax.plot(x, eigenvec, lw=4, label="my solution")
+    ax.plot(x, gt, label="real solution")
+    ax.legend()
+    ax.grid()
+
+
+slider_iters.on_changed(update)
+slider_xw.on_changed(update)
+
+update()
+
 plt.show()
