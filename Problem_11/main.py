@@ -19,6 +19,7 @@ slider_iters = Slider(ax_itres, "Iters", 0, 50, iters, valstep=1)
 slider_xw = Slider(ax_xw, "width", 1, 40, x_width, valstep=1)
 slider_n = Slider(ax_n, "N", 2, 2000, n, valstep=1)
 
+
 def update(*args):
     iters = slider_iters.val
     x_width = slider_xw.val
