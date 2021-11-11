@@ -1,11 +1,5 @@
 import numpy as np
-import os
-import sys
-currentdir = os.path.dirname(os.path.realpath(__file__))
-parentdir = os.path.dirname(currentdir)
-sys.path.append(parentdir)
-
-from Problem_9.impl_9 import tma
+from tma import tma
 from numba import jit
 
 @jit(nopython=True)
