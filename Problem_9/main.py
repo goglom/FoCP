@@ -3,8 +3,13 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 from impl_9 import dif_solver
 
+
+def gt_sol(x, conds):
+    return -np.sin(x) + (conds[1] - conds[0]) / np.pi * x + conds[0]
+
+
 init_conds = np.array([1, 1], dtype=float)
-x= np.linspace(0, np.pi, 30)
+x= np.linspace(0, np.pi, 10)
 r = np.sin(x)
 
 fig, axes = plt.subplots()
@@ -31,14 +36,16 @@ def update(*args):
     init_conds[1] = slider_cb.val
 
     y = dif_solver(x, init_conds, r=r)
+    y_gt = gt_sol(x, init_conds)
+
     axes.clear()
-    axes.plot(x, y, label="TMA")
+    axes.plot(x, y_gt - y, label="Ground truth", lw=4)
+    #axes.plot(x, y, label="TMA")
     axes.set_xticks([0, np.pi/2, np.pi])
     axes.set_xticklabels(["0", "π/2", "π"])
     axes.legend()
-    axes.set_ylim(min, max)
+    #axes.set_ylim(min, max)
     axes.grid()
-    fig.canvas.draw_idle()
 
 
 slider_ca= Slider(ax_ca, "y(a)", min, max, init_conds[0], valstep=alowed_vals)

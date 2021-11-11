@@ -39,11 +39,11 @@ def update(*args):
     
     extent = [x[0], x[-1], t[-1],  t[0]]
     image = heatmap_axis.imshow(u, 'hot', aspect='auto', extent=extent)
-
+    heatmap_axis.set_xlabel("x")
+    heatmap_axis.set_ylabel("t")
     max_u = np.max(u, axis=1)
-    axis2.plot(t, max_u, label=f'factor = ({(max_u[-1] - max_u[0])/(t[-1] - t[0]):.2})')
+    axis2.plot(t, max_u)
     axis2.set_yscale("log")
-    axis2.legend()
 
     fig.colorbar(image, cax=ax_colorbar)
     fig.canvas.draw_idle()

@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.linalg as lin
 from matplotlib import pyplot as plt
-import matplotlib
+
 
 def euler_implicit(x_grid: np.array, matrix: np.array, initital_cond: tuple[float, float]):
     y_vec = np.zeros((len(x_grid), 2))
