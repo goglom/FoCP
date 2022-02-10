@@ -18,6 +18,6 @@ $$
     U_{i, j}^{k + 1} = \Delta t_k \cdot \left(
         \frac{U_{i + 1, j}^{k} - U_{i, j}^{k}}{\Delta r_i \cdot r_i}  
         + \frac{U_{i + 1, j}^{k} - 2 U_{i, j}^{k} + U_{i - 1, j}^{k}}{{\Delta r_i}^2} 
-        + \frac{U_{i, j + 1}^{k} - 2U_{i, j}^{k} + U_{i, j- 1}^{k}}{{\Delta \varphi_j}^2}
+        + \frac{U_{i, j + 1}^{k} - 2U_{i, j}^{k} + U_{i, j- 1}^{k}}{(r_i \cdot \Delta \varphi_j)^2}
     \right) + U_{i, j}^{k}
 $$

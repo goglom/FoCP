@@ -19,6 +19,8 @@ slider_iters = Slider(ax_itres, "Iters", 0, 50, iters, valstep=1)
 slider_xw = Slider(ax_xw, "width", 1, 40, x_width, valstep=1)
 slider_n = Slider(ax_n, "N", 2, 2000, n, valstep=1)
 
+PLANK = 6.582e-16
+MASS = 0.51 * 9.11e-31
 
 def update(*args):
     iters = slider_iters.val
@@ -26,11 +28,13 @@ def update(*args):
     n = slider_n.val
 
     x = np.linspace(-x_width / 2, x_width / 2, n)
-    h = x[1] - x[0]
-    u = x**2 / 2
+    h = (x[1] - x[0]) * 1e-9
+    u = np.where(np.abs(x) < 2, 0, 0.3)
 
-    a = np.full(x.shape[0] - 1, -1 /  h**2 / 2, dtype=float)
-    b = np.full(x.shape[0], 1 / h**2, dtype=float)
+    factor = PLANK**2 / MASS
+
+    a = np.full(x.shape[0] - 1, -factor /  (h**2 * 2), dtype=float) 
+    b = np.full(x.shape[0], factor / h**2, dtype=float)
     b += u
     gen = np.random.RandomState(2)
     d = gen.random_sample(x.shape)
@@ -42,8 +46,8 @@ def update(*args):
     ax.clear()
     ax.set_title(f"Eigen value = {eigenval}")
     ax.plot(x, eigenvec, lw=4, label="my solution")
-    ax.plot(x, gt, label="real solution")
-    ax.set_ylim(0, 0.15)
+    #ax.plot(x, gt, label="real solution")
+    #ax.set_ylim(0, 0.15)
     ax.legend()
     ax.grid()
 
